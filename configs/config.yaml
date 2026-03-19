@@ -1,0 +1,9 @@
+chunk_size: 500
+delay_sec: 1
+
+target_selectors:
+  listing: ""
+  name: ""
+  website: ""
+  email: ""
+  phone: ""

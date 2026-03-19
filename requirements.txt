@@ -1,0 +1,20 @@
+# =============================================
+# Ethical Public Leads Scraper - Milestone 1
+# =============================================
+# Minimal skeleton dependencies only.
+# Python 3.12+ recommended.
+
+# Core UI
+streamlit
+
+# Public web scraping
+requests
+beautifulsoup4
+
+# Data handling and config
+pandas
+pyyaml
+python-dotenv
+
+# AI framework placeholder (used in later milestones)
+langchain
