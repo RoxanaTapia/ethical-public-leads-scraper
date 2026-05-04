@@ -1,4 +1,4 @@
-"""AI enrichment and RAG-like querying module (Issue 1 skeleton)."""
+"""Optional LLM enrichment for leads; in-app search helpers when added."""
 
 from __future__ import annotations
 

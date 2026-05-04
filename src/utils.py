@@ -1,4 +1,4 @@
-"""Helper utilities module (Issue 1 skeleton)."""
+"""Config loading, robots/delay guardrails, and lead record cleaning."""
 
 from __future__ import annotations
 
