@@ -1,9 +1,37 @@
-chunk_size: 500
-delay_sec: 1
+# -----------------------------------------------------------------------------
+# Ethical Public Leads Scraper — default configuration
+# Tune values for your target site and deployment. Selectors below are
+# non-empty placeholders only; operators must replace them with real,
+# site-specific CSS selectors before scraping production pages.
+# -----------------------------------------------------------------------------
 
+# delay_sec: pause between outbound HTTP requests (seconds); reduces load on
+# public servers. Increase if a site is slow or policy asks for slower pacing.
+delay_sec: 1.5
+
+# chunk_size: number of records to process per batch when normalizing or
+# exporting results (not a network setting).
+chunk_size: 500
+
+# timeout_sec: maximum wait per HTTP request before treating it as failed
+# (seconds). Avoid extremes that hang the scraper or abort valid responses.
+timeout_sec: 30
+
+# user_agent: full User-Agent string identifying this bot; include a contact
+# URL or email when appropriate so site owners can reach you.
+user_agent: "EthicalPublicLeadsBot/1.0 (+https://example.com/bot-info)"
+
+# target_selectors: CSS selectors used to locate listing markup and fields.
+# Keys must stay non-empty — empty strings fail at load time (see load_config).
+# Replace every placeholder with selectors that match your target HTML.
 target_selectors:
-  listing: ""
-  name: ""
-  website: ""
-  email: ""
-  phone: ""
+  # listing: outer element that repeats once per lead/card on a results page
+  listing: ".listing"
+  # name: element containing the lead or organization name within a listing
+  name: ".name"
+  # website: link or element for the public website URL within a listing
+  website: ".website"
+  # email: element or mailto target for email within a listing
+  email: ".email"
+  # phone: element containing phone number within a listing
+  phone: ".phone"

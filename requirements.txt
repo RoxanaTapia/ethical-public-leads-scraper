@@ -18,3 +18,7 @@ python-dotenv
 
 # AI framework placeholder (used in later milestones)
 langchain
+langchain-openai
+
+# Tests
+pytest
