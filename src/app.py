@@ -3,7 +3,14 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+
+# Streamlit executes this file with ``src/`` on sys.path, not the repo root, so
+# ``from src.…`` only works once the parent directory is importable.
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 import pandas as pd
 import streamlit as st
@@ -14,7 +21,10 @@ from src.utils import clean_dataframe, load_config
 
 
 def main() -> None:
-    st.set_page_config(page_title="Ethical Public Leads Scraper")
+    st.set_page_config(
+        page_title="Ethical Public Leads Scraper",
+        initial_sidebar_state="expanded",
+    )
     st.title("Ethical Public Leads Scraper")
     st.caption(
         "Public directories only — respect robots.txt, terms of use, and rate limits."
@@ -26,17 +36,26 @@ def main() -> None:
     )
 
     default_config_str = str(DEFAULT_CONFIG_PATH)
-    config_path = st.sidebar.text_input(
-        "Config path",
-        value=default_config_str,
-        help="YAML file with delay_sec, timeout_sec, user_agent, and target_selectors.",
-    )
-    url = st.sidebar.text_input(
-        "Directory page URL",
-        placeholder="https://example.org/public-directory",
+    default_demo_url = "http://127.0.0.1:8765/index.html"
+    st.caption(
+        "Default directory URL targets the bundled `demo/` page. "
+        "Run `python -m http.server 8765` from the `demo/` folder first."
     )
 
-    run = st.sidebar.button("Run pipeline", type="primary")
+    st.subheader("Run")
+    with st.form("pipeline"):
+        config_path = st.text_input(
+            "Config path",
+            value=default_config_str,
+            help="YAML file with delay_sec, timeout_sec, user_agent, and target_selectors.",
+        )
+        url = st.text_input(
+            "Directory page URL",
+            value=default_demo_url,
+            help="Grey hint text in a field is not a value — this field defaults to the "
+            "local demo URL; edit for other pages.",
+        )
+        run = st.form_submit_button("Run pipeline", type="primary")
 
     if run:
         if not url or not url.strip():
@@ -98,8 +117,8 @@ def main() -> None:
             )
     else:
         st.write(
-            "Enter a URL and config path, then **Run pipeline** to scrape, clean, "
-            "optionally enrich (when LLM env vars are set), and export."
+            "Submit **Run pipeline** above to scrape, clean, optionally enrich "
+            "(when LLM env vars are set), and export."
         )
 
 

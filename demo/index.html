@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Demo public directory (synthetic data)</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 42rem;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        color: #222;
+        line-height: 1.45;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      .listing {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        background: #fafafa;
+      }
+      .name {
+        font-weight: 600;
+        margin-bottom: 0.35rem;
+      }
+      .website a,
+      .email a {
+        color: #0b57d0;
+      }
+      .muted {
+        font-size: 0.85rem;
+        color: #555;
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Synthetic demo directory</h1>
+    <p>
+      Fictitious organizations for testing the Ethical Public Leads Scraper.
+      Not a real directory.
+    </p>
+
+    <article class="listing">
+      <div class="name">Riverbend Co-op (demo)</div>
+      <div class="website">
+        <a href="https://example.com/riverbend">https://example.com/riverbend</a>
+      </div>
+      <div class="email">
+        <a href="mailto:hello@example.com">hello@example.com</a>
+      </div>
+      <div class="phone">555-0100</div>
+    </article>
+
+    <article class="listing">
+      <div class="name">Harborlight Workshop (demo)</div>
+      <div class="website">
+        <a href="https://example.org/harborlight">https://example.org/harborlight</a>
+      </div>
+      <div class="email">
+        <a href="mailto:contact@example.org">contact@example.org</a>
+      </div>
+      <div class="phone">555-0101</div>
+    </article>
+
+    <article class="listing">
+      <div class="name">Maple Row Analytics (demo)</div>
+      <div class="website">
+        <a href="https://example.com/maple-row">https://example.com/maple-row</a>
+      </div>
+      <div class="email">
+        <a href="mailto:info@example.com">info@example.com</a>
+      </div>
+      <div class="phone">555-0102</div>
+    </article>
+
+    <p class="muted">
+      Markup uses classes <code>.listing</code>, <code>.name</code>,
+      <code>.website</code>, <code>.email</code>, and <code>.phone</code> to
+      match the default <code>configs/config.yaml</code> selectors.
+    </p>
+  </body>
+</html>

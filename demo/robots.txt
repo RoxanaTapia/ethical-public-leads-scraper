@@ -1,0 +1,4 @@
+# Synthetic demo directory only — allows local and deployed demos for
+# Ethical Public Leads Scraper. Replace on a real site with your policy.
+User-agent: *
+Allow: /
