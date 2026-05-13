@@ -5,7 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from src.scraper import scrape_directory
+from src.scraper import BUNDLED_DEMO_URL, scrape_directory
 
 _FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "sample_directory.html"
 _SAMPLE_HTML = _FIXTURE_PATH.read_text(encoding="utf-8")
@@ -101,3 +101,11 @@ def test_scrape_directory_request_exception_returns_empty(
     mock_get.side_effect = req_lib.Timeout("timed out")
     results = scrape_directory("https://example.com/slow", config=_MINIMAL_CONFIG)
     assert results == []
+
+
+def test_scrape_directory_bundled_demo_extracts_three_rows() -> None:
+    """Bundled demo HTML ships in demo/index.html (no HTTP)."""
+    results = scrape_directory(BUNDLED_DEMO_URL, config=_MINIMAL_CONFIG)
+    assert len(results) == 3
+    assert all(row["source_url"] == BUNDLED_DEMO_URL for row in results)
+    assert "Riverbend" in results[0]["name"]
