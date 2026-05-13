@@ -3,7 +3,14 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
+
+# Streamlit executes this file with ``src/`` on sys.path, not the repo root, so
+# ``from src.…`` only works once the parent directory is importable.
+_ROOT = Path(__file__).resolve().parent.parent
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 import pandas as pd
 import streamlit as st

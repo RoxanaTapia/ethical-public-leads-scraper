@@ -87,6 +87,9 @@ Be explicit about what this MVP **does not** try to solve:
 │   └── utils.py        # Config load, robots, delay, cleaning
 ├── configs/
 │   └── config.yaml
+├── demo/
+│   ├── index.html      # Synthetic directory markup (matches default selectors)
+│   └── robots.txt      # Allow-all for local / static hosting demos
 ├── tests/
 ├── .env.example
 ├── requirements.txt
@@ -111,6 +114,21 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 streamlit run src/app.py
 ```
+
+### Static demo site (client-safe)
+
+The `demo/` folder is a **synthetic** directory page whose classes match the default `target_selectors` in `configs/config.yaml` (`.listing`, `.name`, `.website`, `.email`, `.phone`). The scraper **requires** a fetchable `robots.txt` on the same origin; `demo/robots.txt` is included for that.
+
+**Local try:**
+
+```bash
+cd demo
+python -m http.server 8765
+```
+
+In the Streamlit sidebar, set **Directory page URL** to `http://127.0.0.1:8765/index.html` (keep the default config path). Run **Run pipeline** — you should see three demo rows.
+
+**Deploy:** Upload the contents of `demo/` to any static host (Netlify, Cloudflare Pages, S3, GitHub Pages, etc.) so both `/index.html` and `/robots.txt` are served from the same origin, then use your public `https://…/index.html` URL in the app.
 
 ### Optional LLM enrichment
 
