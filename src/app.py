@@ -16,7 +16,7 @@ import pandas as pd
 import streamlit as st
 
 from src.extractor import enrich_lead
-from src.scraper import DEFAULT_CONFIG_PATH, scrape_directory
+from src.scraper import BUNDLED_DEMO_URL, DEFAULT_CONFIG_PATH, scrape_directory
 from src.utils import clean_dataframe, load_config
 
 
@@ -36,10 +36,12 @@ def main() -> None:
     )
 
     default_config_str = str(DEFAULT_CONFIG_PATH)
-    default_demo_url = "http://127.0.0.1:8765/index.html"
+    default_demo_url = BUNDLED_DEMO_URL
     st.caption(
-        "Default directory URL targets the bundled `demo/` page. "
-        "Run `python -m http.server 8765` from the `demo/` folder first."
+        "Default URL reads the bundled synthetic **demo/** page from the repo (works on "
+        "Streamlit Cloud). To exercise **HTTP + robots.txt**, run "
+        "`python -m http.server 8765` from the `demo/` folder and use "
+        "`http://127.0.0.1:8765/index.html` instead."
     )
 
     st.subheader("Run")
@@ -52,8 +54,8 @@ def main() -> None:
         url = st.text_input(
             "Directory page URL",
             value=default_demo_url,
-            help="Grey hint text in a field is not a value — this field defaults to the "
-            "local demo URL; edit for other pages.",
+            help="Use `builtin:demo` for the shipped synthetic HTML (no local server). "
+            "Use a public https:// URL for a hosted directory page.",
         )
         run = st.form_submit_button("Run pipeline", type="primary")
 
@@ -68,7 +70,12 @@ def main() -> None:
             st.error(str(e))
             return
 
-        with st.spinner("Scraping (robots + polite delay)…"):
+        spinner_msg = (
+            "Loading bundled demo…"
+            if url.strip().lower() == BUNDLED_DEMO_URL.lower()
+            else "Scraping (robots + polite delay)…"
+        )
+        with st.spinner(spinner_msg):
             try:
                 raw = scrape_directory(url.strip(), config=cfg)
             except Exception as e:

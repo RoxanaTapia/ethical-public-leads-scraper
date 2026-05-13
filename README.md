@@ -127,57 +127,57 @@ The next section is the **stakeholder-ready path** for showing a live extraction
 
 ## Client demo walkthrough
 
-Use this when you want a **repeatable, policy-safe** demo: the page is **synthetic** (fictitious organizations and example.com-style URLs), the markup matches the repo’s default selectors, and **`demo/robots.txt`** allows automated fetches on the same origin so the app’s `robots.txt` gate succeeds.
+Use this when you want a **repeatable, policy-safe** demo: the page is **synthetic** (fictitious organizations and example.com-style URLs), and the markup matches the repo’s default selectors.
+
+The app’s default directory URL is **`builtin:demo`**, which reads [`demo/index.html`](demo/index.html) from the repository (no local HTTP server, no `robots.txt` fetch). That path works **locally and on Streamlit Community Cloud**. To demonstrate **HTTP + `robots.txt` + polite delay**, serve the same files over HTTP (below) and use `http://127.0.0.1:8765/index.html`, or deploy [`demo/`](demo/) to a static host and use its public `https://…` URL.
 
 ### What you are demonstrating
 
 - **Transparency:** Configuration (`configs/config.yaml`) drives delays, User-Agent, and CSS selectors—easy to show on screen or in a slide deck.  
-- **Guardrails:** The pipeline checks `robots.txt` before requesting the directory page and uses a polite delay between requests.  
+- **Guardrails:** With a **normal `http(s)://` URL**, the pipeline checks `robots.txt` before fetching and applies a polite delay before the HTTP GET.  
 - **Output:** After a successful run you get a **preview table**, plus **CSV** and **JSON** downloads you can hand to a client as “sample deliverable” artifacts.
 
-### Before you start (two processes)
+### Steps — default (one terminal, Cloud-safe)
 
-You need **two terminals** (or one terminal plus your IDE’s terminal): one serves the static demo HTML, the other runs Streamlit.
+1. **Activate the virtual environment** from [Quick start](#quick-start) and install dependencies if needed.  
+2. From the **repository root**, start the app:
 
-### Steps (about three minutes)
+   ```bash
+   streamlit run src/app.py
+   ```
 
-1. **Activate the same virtual environment** you created in [Quick start](#quick-start) and install dependencies if you have not already.  
-2. **Serve the bundled demo site** from the `demo/` directory (port **8765** matches the app’s default URL):
+3. In the **Run** form, keep the default **Config path** and the default **Directory page URL** (`builtin:demo`). Submit **Run pipeline** — you should see **three** demo rows immediately (no separate demo server).
+
+4. **Walk through the result:** row count, **source URL** caption (`builtin:demo`), and **Download CSV / JSON**.
+
+### Optional — full HTTP + `robots.txt` path (two terminals)
+
+1. **Serve** [`demo/`](demo/) on port **8765**:
 
    ```bash
    cd demo
    python -m http.server 8765
    ```
 
-   Leave this process running. You can confirm it in a browser by opening `http://127.0.0.1:8765/index.html` and `http://127.0.0.1:8765/robots.txt`.
-
-3. **Start the app** (from the **repository root**, not inside `demo/`):
-
-   ```bash
-   streamlit run src/app.py
-   ```
-
-4. In the **Run** form on the main page, keep the default **Config path** pointing at `configs/config.yaml` and the default **Directory page URL** (`http://127.0.0.1:8765/index.html`) unless you are using a hosted copy (see below). Submit **Run pipeline**.
-
-5. **Walk through the result:** point out **three** extracted rows, the **source URL** caption, and the **Download CSV / JSON** buttons. If optional LLM keys are configured, mention the extra summary column as an add-on.
+2. Leave that running, start Streamlit from the **repo root** (second terminal), set **Directory page URL** to `http://127.0.0.1:8765/index.html`, and run **Run pipeline** (respects `demo/robots.txt` and YAML `delay_sec`).
 
 ### Success checklist
 
 | Check | What it means |
 |------|----------------|
-| Preview shows **3 rows** | Selectors and HTML line up; the demo server returned the page. |
+| Preview shows **3 rows** | Selectors match the bundled or served `demo/index.html`. |
 | Fields look populated | Name, website, email, and phone were parsed from each `.listing` card. |
 | Downloads work | The same data leaves the browser as portable files—typical handoff to analysis or a CRM import test. |
 
 ### If the preview is empty
 
-- Confirm the **demo server** is still running and the URL opens in a browser.  
-- Confirm you are using **`http://127.0.0.1:8765/index.html`** (or your deployed HTTPS equivalent) so **`/robots.txt`** on that **same host and port** is the file from `demo/robots.txt`. The scraper **does not** run when `robots.txt` is missing or unusable.  
-- Wait for the configured **delay** in YAML before assuming a failure; the first request can take a few seconds.
+- If you used **`http://127.0.0.1:8765/...`**: confirm the **demo server** is running and **`/robots.txt`** is reachable on that origin; the scraper returns no rows when `robots.txt` is missing or disallows the fetch.  
+- If you used **`builtin:demo`**: confirm `demo/index.html` is present in the deployed checkout (it ships in this repo).  
+- For **HTTP** URLs, wait for the configured **delay** in YAML before assuming a failure.
 
 ### Hosted demo (remote clients)
 
-To demo on a call without asking viewers to run a local server, deploy the **contents** of [`demo/`](demo/) to any static host so that **`index.html`** and **`robots.txt`** are both available from the **same site origin**. Use the public `https://…/index.html` URL in the **Directory page URL** field. The synthetic content stays clearly non-production and avoids scraping an unknown third party during a sales or interview conversation.
+To demo **HTTP + robots** on a call without localhost, deploy the **contents** of [`demo/`](demo/) to any static host so that **`index.html`** and **`robots.txt`** are both available from the **same site origin**. Use the public `https://…/index.html` URL in the **Directory page URL** field. For a zero-setup hosted app, rely on the default **`builtin:demo`** instead.
 
 ---
 
@@ -194,7 +194,7 @@ Deploy from [share.streamlit.io](https://share.streamlit.io) using this reposito
 
 **Secrets (optional LLM):** In the app **Settings → Secrets**, add the same variables you would put in `.env` (for example `LLM_API_KEY`, `LLM_MODEL`, and optionally `LLM_PROVIDER`). Never commit real keys to the repo.
 
-**Bundled demo URL on Cloud:** The app defaults to `http://127.0.0.1:8765/index.html` for a **local** demo server. On Community Cloud, `127.0.0.1` is the **container**, not your laptop—so that default **will not** reach a server on your machine. For a hosted app, either paste a **public HTTPS** URL where you deployed [`demo/`](demo/) (with `robots.txt` on the same origin), or run the scraper against another allowed public directory whose selectors match your YAML.
+**Default demo on Cloud:** The app’s default directory URL is **`builtin:demo`**, which reads the bundled [`demo/index.html`](demo/index.html) from the repo (no `http://127.0.0.1` required). That avoids loopback confusion on Community Cloud. For **HTTP + `robots.txt`**, paste a public `https://…` URL where you deployed [`demo/`](demo/) (same origin as `robots.txt`) or run locally with `http://127.0.0.1:8765/index.html` as described in [Client demo walkthrough](#client-demo-walkthrough).
 
 ---
 
