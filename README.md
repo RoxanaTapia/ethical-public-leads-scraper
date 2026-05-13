@@ -1,8 +1,13 @@
 # Ethical Public Leads Scraper
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/RoxanaTapia/ethical-public-leads-scraper?sort=semver)](https://github.com/RoxanaTapia/ethical-public-leads-scraper/releases)
+
 **Turn public directory pages into structured lead data**—with guardrails, optional AI summaries, and exports you can hand to a CRM or spreadsheet.
 
-This repository is a **Phase 1 work-in-progress (WIP) portfolio build**: a small, transparent pipeline you can run locally to demonstrate responsible web data collection and practical Python engineering (Streamlit UI, config-driven scraping, tests).
+This repository is a **portfolio build** (MVP): a small, transparent pipeline you can run locally—or host on [Streamlit Community Cloud](#streamlit-community-cloud)—to demonstrate responsible web data collection and practical Python engineering (Streamlit UI, config-driven scraping, tests).
+
+**On this page:** [At a glance](#at-a-glance) · [Pipeline](#pipeline) · [Quick start](#quick-start) · [Client demo walkthrough](#client-demo-walkthrough) · [Streamlit Community Cloud](#streamlit-community-cloud) · [Releases and branching](#releases-and-branching) · [Tests](#run-tests)
 
 ---
 
@@ -13,6 +18,7 @@ This repository is a **Phase 1 work-in-progress (WIP) portfolio build**: a small
 | **What it does** | Reads a public listing URL, extracts name / website / email / phone per card, deduplicates, optionally adds a one-line LLM summary, then exports **CSV** or **JSON**. |
 | **Who it is for** | Teams or individuals who need **ethical, explainable** extraction from **public** directories—not logged-in portals or bulk evasion of site policy. |
 | **How you run it** | Local **Streamlit** app + YAML config; **Python 3.12+** recommended (see `requirements.txt`). For a scripted stakeholder demo, use [Client demo walkthrough](#client-demo-walkthrough). |
+| **Deploy** | [Streamlit Community Cloud](#streamlit-community-cloud) — use branch **`stable`**, main file **`src/app.py`**. Production-ish commits are tagged (see [Releases](https://github.com/RoxanaTapia/ethical-public-leads-scraper/releases)). |
 | **License** | MIT — see [LICENSE](LICENSE). |
 
 ---
@@ -172,6 +178,34 @@ You need **two terminals** (or one terminal plus your IDE’s terminal): one ser
 ### Hosted demo (remote clients)
 
 To demo on a call without asking viewers to run a local server, deploy the **contents** of [`demo/`](demo/) to any static host so that **`index.html`** and **`robots.txt`** are both available from the **same site origin**. Use the public `https://…/index.html` URL in the **Directory page URL** field. The synthetic content stays clearly non-production and avoids scraping an unknown third party during a sales or interview conversation.
+
+---
+
+## Streamlit Community Cloud
+
+Deploy from [share.streamlit.io](https://share.streamlit.io) using this repository.
+
+| Setting | Value |
+|--------|--------|
+| **Repository** | `RoxanaTapia/ethical-public-leads-scraper` (public) |
+| **Branch** | **`stable`** — tracks release-ready commits; day-to-day development stays on `main`. |
+| **Main file** | **`src/app.py`** (Cloud runs from the repo root; paths in `st.image` / assets are relative to that root). |
+| **Dependencies** | **`requirements.txt`** at the repository root |
+
+**Secrets (optional LLM):** In the app **Settings → Secrets**, add the same variables you would put in `.env` (for example `LLM_API_KEY`, `LLM_MODEL`, and optionally `LLM_PROVIDER`). Never commit real keys to the repo.
+
+**Bundled demo URL on Cloud:** The app defaults to `http://127.0.0.1:8765/index.html` for a **local** demo server. On Community Cloud, `127.0.0.1` is the **container**, not your laptop—so that default **will not** reach a server on your machine. For a hosted app, either paste a **public HTTPS** URL where you deployed [`demo/`](demo/) (with `robots.txt` on the same origin), or run the scraper against another allowed public directory whose selectors match your YAML.
+
+---
+
+## Releases and branching
+
+| Branch | Role |
+|--------|------|
+| **`main`** | Integration branch; receives feature PRs. |
+| **`stable`** | Release line for hosting (Streamlit Cloud, demos); updated when you cut a release. |
+
+Version tags (for example **`v1.0.0`**) mark the same commits you trust for that release. **Release notes** live on [GitHub Releases](https://github.com/RoxanaTapia/ethical-public-leads-scraper/releases).
 
 ---
 
