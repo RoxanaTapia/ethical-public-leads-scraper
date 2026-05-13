@@ -29,7 +29,7 @@ This repository is a **Phase 1 work-in-progress (WIP) portfolio build**: a small
 
 When you run Streamlit, you typically see:
 
-1. **Sidebar** — Target URL, path to the YAML config, and a **Run pipeline** action.  
+1. **Run** (main page) — Target URL, path to the YAML config, and a **Run pipeline** button.  
 2. **Main area** — Row count, a **table preview** of extracted (and cleaned) leads.  
 3. **Exports** — **Download CSV** and **Download JSON** for the current result set.
 
@@ -126,7 +126,7 @@ cd demo
 python -m http.server 8765
 ```
 
-In the Streamlit sidebar, set **Directory page URL** to `http://127.0.0.1:8765/index.html` (keep the default config path). Run **Run pipeline** — you should see three demo rows.
+In the app, set **Directory page URL** to `http://127.0.0.1:8765/index.html` (keep the default config path). Click **Run pipeline** — you should see three demo rows.
 
 **Deploy:** Upload the contents of `demo/` to any static host (Netlify, Cloudflare Pages, S3, GitHub Pages, etc.) so both `/index.html` and `/robots.txt` are served from the same origin, then use your public `https://…/index.html` URL in the app.
 
